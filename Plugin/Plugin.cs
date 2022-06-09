@@ -21,7 +21,7 @@ namespace LordAshes
         // Plugin info
         public const string Name = "Ping Plug-In";              
         public const string Guid = "org.lordashes.plugins.projectile";
-        public const string Version = "1.2.0.0";
+        public const string Version = "2.0.0.0";
 
         public class P3
         {
@@ -116,6 +116,7 @@ namespace LordAshes
                 UnityEngine.Debug.Log("Projectile Plugin: PathBuilder " + builder.Key + " => " + Convert.ToString(builder.Value));
             }
 
+            UnityEngine.Debug.Log("Projectile Plugin: Subscribing to projectile request.");
             AssetDataPlugin.Subscribe(ProjectilePlugin.Guid, HandleRequest);
 
             var harmony = new Harmony(Guid);
@@ -133,7 +134,7 @@ namespace LordAshes
                 if (asset != null)
                 {
                     UnityEngine.Debug.Log("Projectile Plugin: Adding Attacker To Targets List");
-                    selectTarget.Add(new P3(asset.HookSpellCast.position));
+                    selectTarget.Add(new P3(asset.GetHook(CreatureBoardAsset.HookTransform.SPELL).position));
                 }
             }
             if (attackSelected != p.name && attackSelected != "") { UnityEngine.Debug.Log("Projectile Plugin: Menu Check: " + p.name+" (" + t + ") => Rejected For Attack Name"); return false; }
@@ -169,13 +170,13 @@ namespace LordAshes
                             break;
                         case "CAST":
                         case "SPELL":
-                            selectTarget.Add(new P3(asset.HookSpellCast.position));
+                            selectTarget.Add(new P3(asset.GetHook(CreatureBoardAsset.HookTransform.SPELL).position));
                             break;
                         case "TORCH":
-                            selectTarget.Add(new P3(asset.HookTorch.position));
+                            selectTarget.Add(new P3(asset.GetHook(CreatureBoardAsset.HookTransform.TORCH).position));
                             break;
                         default:
-                            selectTarget.Add(new P3(asset.HookHitTarget.position));
+                            selectTarget.Add(new P3(asset.GetHook(CreatureBoardAsset.HookTransform.HIT).position));
                             break;
                     }
                 }
